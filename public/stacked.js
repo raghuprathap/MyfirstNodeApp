@@ -1,7 +1,32 @@
-d3.json('./data.json', function(err,data){
-    var outerWidth = 800;
+function drawGraph(dataToRemove){
+    d3.json('./data.json', function(err,data){
+        if(dataToRemove){
+            for(var i=0; i<data.length; i++){
+                if(dataToRemove["Country Name"] === data[i]["Country Name"]){
+                   data.splice(i, 1);
+                }
+            }
+
+        }
+            makeChart(data);
+
+
+
+
+    /*data.forEach(function(d){
+        //d["\"Country Name\""] = d["\"Country Name\""].replace(/\"/g, "");
+        //d["\"Area (Sq. Km.) 2010\""] = parseFloat(d["\"Area (Sq. Km.) 2010\""].replace(/\"/g, ""));
+
+        console.log(d["\"Area (Sq. Km.) 2010\""]);
+        console.log(d["\"Country Name\""].replace(/\"/g, ""));
+       // makeChart();
+    });*/
+
+});
+          function makeChart(data){
+        var outerWidth = 800;
       var outerHeight = 300;
-      var margin = { left: 90, top: 30, right: 30, bottom: 30 };
+      var margin = { left: 90, top: 30, right: 30, bottom: 150 };
       var barPadding = 0.2;
 
       var xColumn = "Country Name";
@@ -25,7 +50,6 @@ d3.json('./data.json', function(err,data){
       var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
       var yAxis = d3.svg.axis().scale(yScale).tickFormat(function(d) { return formatValue(d)}).orient("left");
 
-      function makeChart(){
         xScale.domain(data.map(function (d){
             return d[xColumn];
         }));
@@ -45,6 +69,8 @@ d3.json('./data.json', function(err,data){
           .attr("width", xScale.rangeBand());
         bars.attr("x",      function (d){
          return xScale(d[xColumn]);
+         }).attr("id",      function (d){
+         return d[xColumn];
          }).attr("y", function (d){
             return yScale(parseFloat(d[yColumn]));
         }).attr("height", function (d){
@@ -52,15 +78,6 @@ d3.json('./data.json', function(err,data){
          });
         bars.exit().remove();
       }
-       makeChart();
-    /*data.forEach(function(d){
-        //d["\"Country Name\""] = d["\"Country Name\""].replace(/\"/g, "");
-        //d["\"Area (Sq. Km.) 2010\""] = parseFloat(d["\"Area (Sq. Km.) 2010\""].replace(/\"/g, ""));
 
-        console.log(d["\"Area (Sq. Km.) 2010\""]);
-        console.log(d["\"Country Name\""].replace(/\"/g, ""));
-       // makeChart();
-    });*/
-
-});
+}
 

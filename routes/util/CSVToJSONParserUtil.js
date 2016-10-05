@@ -4,7 +4,8 @@ function CSVtoJsonParser(fileData, callback){
   var fs = require("fs");
   var stats = fs.statSync(fileData.fileName);
   var readline=require('readline');
-
+  var mongoose = require('mongoose');
+  mongoose.connect('mongodb://localhost/test');
   var headers = [];
   var requiredHeaders = [];
   var i = 0;
@@ -56,7 +57,7 @@ function CSVtoJsonParser(fileData, callback){
           }
 
         }
-        //console.log(obj);
+        console.log(obj);
         jsonArray.push(obj);
         //console.log(jsonArray.length);
 

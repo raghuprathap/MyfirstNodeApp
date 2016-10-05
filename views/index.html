@@ -7,8 +7,9 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
   </head>
   <body>
+  <button id="button">Delete selected row</button>
   <div>
-    <table id="example" class="display" align="left" cellspacing="0" width="100px">
+    <table id="example" class="display" align="left" cellspacing="0" width="40px">
         <thead>
             <tr>
                 <th>Country Name</th>
@@ -27,9 +28,10 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
+        drawGraph();
         d3.json('./data.json', function(err,data){
 
-            $('#example').DataTable({
+            var table = $('#example').DataTable({
               "bPaginate": false,
               "bInfo": false,
               "bAutoWidth":false,
@@ -41,22 +43,51 @@
               ],
               "columnDefs": [ {
         "targets": 2,
-          "render": function ( data, type, full, meta ) {
-            return '<a id="deleteRow" country="'+full["Country Name"]+'" area="'+full["Area"]+'" href="'+data+'">delete</a>';
-          }
-        } ]
+
+        } ],
+
+
             });
+            $('#example tbody').on( 'click', 'tr', function () {
+        if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+        }
+        else {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    } );
+            $('#button').click( function () {
+
+             /* var fs = require('fs');
+              var obj;
+              fs.readFile('./data.json', 'utf8', function (err, data) {
+                if (err) throw err;
+                obj = JSON.parse(data);
+            });*/
+
+        var rowDataToDelete = table.row('.selected').data();
+        table.row('.selected').remove().draw( false );
+        drawGraph(rowDataToDelete);
+       // d3.select("#"+ rowDataToDelete).remove();
+
+
+    } );
         });
-        $('#example').on('click', '#deleteRow', function(){
+        /*$('#deleteRow').on('click', function(){
           console.log("Hello");
-      });
+      });*/
 
         /*$("#deleteRow").on("click", function(event){
           event.stopPrapogation();
           console.log(this);
         })*/
 
+
+
       });
+
+
     </script>
 
   </body>
