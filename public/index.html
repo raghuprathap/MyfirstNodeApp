@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>D3 try it out!!</title>
+  </head>
+  <body>
+  <div>
+    <table id="example" class="display" align="left" cellspacing="0" width="40%">
+        <thead>
+            <tr>
+                <th>Country Name</th>
+                <th>Area (Sq. Km.) 2010</th>
+            </tr>
+        </thead>
+
+    </table>
+  </div>
+<div id="graph">
+
+</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="./stacked.js" charset="utf-8"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        d3.json('./data.json', function(err,data){
+          console.log(data);
+         $('#example').DataTable({
+
+        "bPaginate": false,
+        "bScrollCollapse": false,
+        "bInfo": false,
+        "bAutoWidth":false,
+        "bFilter": false,
+            "columnDefs": [ {
+    		"targets": 0,
+    		"data": "download_link",
+    		"render": function ( data, type, full, meta ) {
+      		return '<a href="'+data+'">delete</a>';
+    		}
+  		} ]
+            });
+
+          } );
+        $('#example tbody').on( 'click', 'img.icon-delete', function () {
+    		table
+        .row( $(this).parents('tr') )
+        .remove()
+        .draw();
+		} );
+        });
+
+    </script>
+
+  </body>
+</html>
+

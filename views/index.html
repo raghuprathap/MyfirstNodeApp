@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>D3 try it out!!</title>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+  </head>
+  <body>
+  <div>
+    <table id="example" class="display" align="left" cellspacing="0" width="100px">
+        <thead>
+            <tr>
+                <th>Country Name</th>
+                <th>Area (Sq. Km.) 2010</th>
+            </tr>
+        </thead>
+
+    </table>
+  </div>
+<div id="graph">
+
+</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="./stacked.js" charset="utf-8"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        d3.json('./data.json', function(err,data){
+
+            $('#example').DataTable({
+              "bPaginate": false,
+              "bInfo": false,
+              "bAutoWidth":false,
+              "bFilter": false,
+              "aaData": data,
+              "columns": [
+                { "data": "Country Name" }, // <-- which values to use inside object
+                { "data": "Area" }
+              ],
+              "columnDefs": [ {
+        "targets": 2,
+          "render": function ( data, type, full, meta ) {
+            return '<a id="deleteRow" country="'+full["Country Name"]+'" area="'+full["Area"]+'" href="'+data+'">delete</a>';
+          }
+        } ]
+            });
+        });
+        $('#example').on('click', '#deleteRow', function(){
+          console.log("Hello");
+      });
+
+        /*$("#deleteRow").on("click", function(event){
+          event.stopPrapogation();
+          console.log(this);
+        })*/
+
+      });
+    </script>
+
+  </body>
+</html>
+
+<!-- "bPaginate": false,
+        "bScrollCollapse": false,
+        "bInfo": false,
+        "bAutoWidth":false,
+        "bFilter": false,
+        "columnDefs": [ {
+        "targets": 0,
+          "render": function ( data, type, full, meta ) {
+            return '<a href="'+data+'">delete</a>';
+          }
+        } ]
+            } -->
